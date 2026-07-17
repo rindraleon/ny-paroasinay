@@ -13,10 +13,13 @@ class BackupService {
   static Future<void> exportAndShare() async {
     await DatabaseService.instance.close();
     final Directory directory = await getApplicationDocumentsDirectory();
-    final String name = 'ny_paroasinay_sauvegarde_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.db';
+    final String name =
+        'ny_paroasinay_sauvegarde_${DateFormat('yyyyMMdd_HHmm').format(DateTime.now())}.db';
     final File target = File(path.join(directory.path, name));
     await File(await DatabaseService.instance.databasePath()).copy(target.path);
-    await Share.shareXFiles(<XFile>[XFile(target.path)], subject: 'Sauvegarde Ny Paroasinay');
+    await Share.shareXFiles(<XFile>[
+      XFile(target.path),
+    ], subject: 'Sauvegarde Ny Paroasinay');
   }
 
   /// Sélectionne une sauvegarde .db, remplace les données locales et retourne true si réussi.

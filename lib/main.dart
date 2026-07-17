@@ -10,17 +10,17 @@ class ParishApp extends StatelessWidget {
   const ParishApp({super.key});
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Ny Paroasinay',
-        debugShowCheckedModeBanner: false,
-        locale: const Locale('fr'),
-        supportedLocales: const <Locale>[Locale('fr')],
-        localizationsDelegates: GlobalMaterialLocalizations.delegates,
-        theme: ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: const Color(0xff176b47),
-          scaffoldBackgroundColor: const Color(0xfff8faf8),
-          appBarTheme: const AppBarTheme(centerTitle: false),
-        ),
-        home: const HomeScreen(),
-      );
+    title: 'Ny Paroasinay',
+    debugShowCheckedModeBanner: false,
+    locale: const Locale('fr'),
+    supportedLocales: const <Locale>[Locale('fr')],
+    localizationsDelegates: GlobalMaterialLocalizations.delegates,
+    theme: ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: const Color(0xff176b47),
+      scaffoldBackgroundColor: const Color(0xfff8faf8),
+      appBarTheme: const AppBarTheme(centerTitle: false),
+    ),
+    home: const HomeScreen(),
+  );
 }

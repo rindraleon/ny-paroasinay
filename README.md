@@ -21,7 +21,7 @@ Prérequis : Flutter stable et Android SDK.
 ```bash
 flutter pub get
 flutter create --platforms=android --org mg.tsararivotra . # une seule fois si android/ n’existe pas
-dart run tool/prepare_android.dart # définit le nom Ny Paroasinay
+dart run tool/prepare_android.dart # définit Ny Paroasinay
 dart run flutter_launcher_icons # génère l’icône de Saint François
 flutter run
 ```

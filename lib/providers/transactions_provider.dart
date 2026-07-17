@@ -2,11 +2,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../data/database_service.dart';
 import '../models/transaction.dart';
 
-final transactionsProvider = AsyncNotifierProvider<TransactionsNotifier, List<CashTransaction>>(TransactionsNotifier.new);
+final transactionsProvider =
+    AsyncNotifierProvider<TransactionsNotifier, List<CashTransaction>>(
+      TransactionsNotifier.new,
+    );
 
 class TransactionsNotifier extends AsyncNotifier<List<CashTransaction>> {
   @override
-  Future<List<CashTransaction>> build() => DatabaseService.instance.allTransactions();
+  Future<List<CashTransaction>> build() =>
+      DatabaseService.instance.allTransactions();
 
   Future<void> save(CashTransaction transaction) async {
     await DatabaseService.instance.save(transaction);
@@ -19,4 +23,16 @@ class TransactionsNotifier extends AsyncNotifier<List<CashTransaction>> {
   }
 }
 
-final balanceProvider = Provider<int>((Ref ref) => ref.watch(transactionsProvider).valueOrNull?.fold<int>(0, (int value, CashTransaction tx) => value + (tx.type == TransactionType.income ? tx.amount : -tx.amount)) ?? 0);
+final balanceProvider = Provider<int>(
+  (Ref ref) =>
+      ref
+          .watch(transactionsProvider)
+          .valueOrNull
+          ?.fold<int>(
+            0,
+            (int value, CashTransaction tx) =>
+                value +
+                (tx.type == TransactionType.income ? tx.amount : -tx.amount),
+          ) ??
+      0,
+);
