@@ -22,15 +22,15 @@ class BackupService {
   }
 
   /// Sélectionne une sauvegarde .db, remplace les données locales et retourne true si réussi.
-  static Future<bool> importFromPicker() async {
-    final FilePickerResult? result = await FilePicker().pickFiles(
-      type: FileType.custom,
-      allowedExtensions: <String>['db'],
-    );
-    if (result == null || result.files.single.path == null) return false;
-    final File source = File(result.files.single.path!);
-    await DatabaseService.instance.close();
-    await source.copy(await DatabaseService.instance.databasePath());
-    return true;
-  }
+  // static Future<bool> importFromPicker() async {
+  //   final FilePickerResult? result = await FilePicker().pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: <String>['db'],
+  //   );
+  //   if (result == null || result.files.single.path == null) return false;
+  //   final File source = File(result.files.single.path!);
+  //   await DatabaseService.instance.close();
+  //   await source.copy(await DatabaseService.instance.databasePath());
+  //   return true;
+  // }
 }
