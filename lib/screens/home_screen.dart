@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
 import '../providers/transactions_provider.dart';
-import '../services/backup_service.dart';
 import '../services/pdf_report_service.dart';
 import '../widgets/money.dart';
 import 'transaction_form.dart';
@@ -277,98 +276,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Text('Générer et partager le rapport PDF'),
           ),
         ),
-        const SizedBox(height: 24),
-        Text('Sauvegarde des données',
-            style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 8),
-        const Text(
-            'La sauvegarde contient toutes les opérations de caisse. Conservez-la dans un endroit sûr.'),
-        const SizedBox(height: 10),
-        OutlinedButton.icon(
-          onPressed: _exportBackup,
-          icon: const Icon(Icons.backup_outlined),
-          label: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text('Créer et partager une sauvegarde'),
-          ),
-        ),
-        const SizedBox(height: 8),
-        OutlinedButton.icon(
-          onPressed: _importBackup,
-          icon: const Icon(Icons.restore_page_outlined),
-          label: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text('Importer une sauvegarde'),
-          ),
-        ),
       ],
     );
   }
 
   Future<void> _exportPdf(List<CashTransaction> items) async {
     await PdfReportService.shareGlobalReport(items);
-  }
-
-  Future<void> _exportBackup() async {
-    try {
-      await BackupService.exportAndShare();
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Sauvegarde créée. Choisissez maintenant où la conserver.')),
-        );
-      }
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Impossible de créer la sauvegarde.')),
-        );
-      }
-    }
-  }
-
-  Future<void> _importBackup() async {
-    final bool? confirmed = await showDialog<bool>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Importer une sauvegarde ?'),
-          content: const Text(
-              'Les données actuelles de ce téléphone seront remplacées par la sauvegarde sélectionnée.'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Annuler'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Importer'),
-            ),
-          ],
-        );
-      },
-    );
-    if (confirmed != true) return;
-    try {
-      final bool imported = await BackupService.importFromPicker();
-      if (imported) {
-        ref.invalidate(transactionsProvider);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Sauvegarde importée avec succès.')),
-          );
-        }
-      }
-    } catch (_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content:
-                  Text('Importation impossible : vérifiez le fichier choisi.')),
-        );
-      }
-    }
   }
 
   Widget _transactionTile(CashTransaction transaction) {
