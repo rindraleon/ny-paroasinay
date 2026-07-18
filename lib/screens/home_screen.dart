@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
 import '../providers/transactions_provider.dart';
-import '../services/pdf_report_service.dart';
 import '../widgets/money.dart';
 import 'transaction_form.dart';
 
@@ -267,21 +266,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 16),
-        FilledButton.icon(
-          onPressed: items.isEmpty ? null : () => _exportPdf(items),
-          icon: const Icon(Icons.picture_as_pdf_outlined),
-          label: const Padding(
-            padding: EdgeInsets.symmetric(vertical: 10),
-            child: Text('Générer et partager le rapport PDF'),
-          ),
-        ),
       ],
     );
-  }
-
-  Future<void> _exportPdf(List<CashTransaction> items) async {
-    await PdfReportService.shareGlobalReport(items);
   }
 
   Widget _transactionTile(CashTransaction transaction) {
