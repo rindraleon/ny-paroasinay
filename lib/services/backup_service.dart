@@ -23,7 +23,7 @@ class BackupService {
 
   /// Sélectionne une sauvegarde .db, remplace les données locales et retourne true si réussi.
   static Future<bool> importFromPicker() async {
-    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+    final FilePickerResult? result = await FilePicker().pickFiles(
       type: FileType.custom,
       allowedExtensions: <String>['db'],
     );
