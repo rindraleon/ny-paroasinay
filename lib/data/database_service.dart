@@ -11,15 +11,11 @@ class DatabaseService {
   Future<Database> get database async => _database ??= await _open();
 
   Future<Database> _open() async {
-    final String path = join(
-      await getDatabasesPath(),
-      'paroisse_tresorerie.db',
-    );
-    return openDatabase(
-      path,
-      version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute('''
+    final String path =
+        join(await getDatabasesPath(), 'paroisse_tresorerie.db');
+    return openDatabase(path, version: 1,
+        onCreate: (Database db, int version) async {
+      await db.execute('''
         CREATE TABLE transactions(
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           type TEXT NOT NULL, amount INTEGER NOT NULL, date TEXT NOT NULL,
@@ -28,16 +24,13 @@ class DatabaseService {
           is_anonymous INTEGER NOT NULL DEFAULT 0
         )
       ''');
-      },
-    );
+    });
   }
 
   Future<List<CashTransaction>> allTransactions() async {
     final Database db = await database;
-    final List<Map<String, Object?>> rows = await db.query(
-      'transactions',
-      orderBy: 'date DESC, id DESC',
-    );
+    final List<Map<String, Object?>> rows =
+        await db.query('transactions', orderBy: 'date DESC, id DESC');
     return rows.map(CashTransaction.fromMap).toList();
   }
 
@@ -46,12 +39,8 @@ class DatabaseService {
     if (transaction.id == null) {
       await db.insert('transactions', transaction.toMap()..remove('id'));
     } else {
-      await db.update(
-        'transactions',
-        transaction.toMap()..remove('id'),
-        where: 'id = ?',
-        whereArgs: <Object>[transaction.id!],
-      );
+      await db.update('transactions', transaction.toMap()..remove('id'),
+          where: 'id = ?', whereArgs: <Object>[transaction.id!]);
     }
   }
 

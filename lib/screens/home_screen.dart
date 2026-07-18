@@ -20,12 +20,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AsyncValue<List<CashTransaction>> transactions = ref.watch(
-      transactionsProvider,
-    );
+    final AsyncValue<List<CashTransaction>> transactions =
+        ref.watch(transactionsProvider);
     return Scaffold(
+      backgroundColor: const Color(0xFFFFF8E7),
       appBar: AppBar(
-        title: const Text('Ny Paroasinay'),
+        title: const Text('Paroisse St François d\'Assise'),
         actions: <Widget>[
           IconButton(
             onPressed: () => ref.invalidate(transactionsProvider),
@@ -115,15 +115,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Ny Paroasinay',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    'Paroisse St François d\'Assise',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    'Saint François d’Assise',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
+                  Text('Saint François d’Assise',
+                      style: Theme.of(context).textTheme.titleMedium),
                 ],
               ),
             ),
@@ -147,9 +146,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 const SizedBox(height: 8),
                 Text(
                   money(balance),
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -164,18 +164,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ],
         ),
         const SizedBox(height: 22),
-        Text(
-          'Opérations récentes',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Opérations récentes',
+            style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 8),
         if (items.isEmpty)
           const Card(
             child: Padding(
               padding: EdgeInsets.all(18),
               child: Text(
-                'Aucune opération. Appuyez sur « Opération » pour commencer.',
-              ),
+                  'Aucune opération. Appuyez sur « Opération » pour commencer.'),
             ),
           )
         else
@@ -184,41 +181,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _stat(String label, int value, Color color) => Card(
-    child: Padding(
-      padding: const EdgeInsets.all(14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Icon(
-            label.startsWith('Entrées')
-                ? Icons.arrow_downward_rounded
-                : Icons.arrow_upward_rounded,
-            color: color,
-          ),
-          const SizedBox(height: 6),
-          Text(label),
-          const SizedBox(height: 8),
-          Text(
-            money(value),
-            style: TextStyle(color: color, fontWeight: FontWeight.bold),
-          ),
-        ],
+  Widget _stat(String label, int value, Color color) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Icon(
+              label.startsWith('Entrées')
+                  ? Icons.arrow_downward_rounded
+                  : Icons.arrow_upward_rounded,
+              color: color,
+            ),
+            const SizedBox(height: 6),
+            Text(label),
+            const SizedBox(height: 8),
+            Text(
+              money(value),
+              style: TextStyle(color: color, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 
-  Widget _journal(List<CashTransaction> items) => ListView(
-    padding: const EdgeInsets.all(16),
-    children: <Widget>[
-      Text('Journal de caisse', style: Theme.of(context).textTheme.titleLarge),
-      const SizedBox(height: 8),
-      if (items.isEmpty)
-        const Text('Aucune opération enregistrée.')
-      else
-        ...items.map(_transactionTile),
-    ],
-  );
+  Widget _journal(List<CashTransaction> items) {
+    return ListView(
+      padding: const EdgeInsets.all(16),
+      children: <Widget>[
+        Text('Journal de caisse',
+            style: Theme.of(context).textTheme.titleLarge),
+        const SizedBox(height: 8),
+        if (items.isEmpty)
+          const Text('Aucune opération enregistrée.')
+        else
+          ...items.map(_transactionTile),
+      ],
+    );
+  }
 
   Widget _report(List<CashTransaction> items) {
     final int income = items
@@ -241,9 +243,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 trailing: Text(
                   money(income),
                   style: const TextStyle(
-                    color: Colors.green,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Colors.green, fontWeight: FontWeight.bold),
                 ),
               ),
               const Divider(height: 1),
@@ -253,9 +253,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 trailing: Text(
                   money(expense),
                   style: const TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      color: Colors.red, fontWeight: FontWeight.bold),
                 ),
               ),
               const Divider(height: 1),
@@ -280,14 +278,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        Text(
-          'Sauvegarde des données',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+        Text('Sauvegarde des données',
+            style: Theme.of(context).textTheme.titleLarge),
         const SizedBox(height: 8),
         const Text(
-          'La sauvegarde contient toutes les opérations de caisse. Conservez-la dans un endroit sûr.',
-        ),
+            'La sauvegarde contient toutes les opérations de caisse. Conservez-la dans un endroit sûr.'),
         const SizedBox(height: 10),
         OutlinedButton.icon(
           onPressed: _exportBackup,
@@ -320,10 +315,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'Sauvegarde créée. Choisissez maintenant où la conserver.',
-            ),
-          ),
+              content: Text(
+                  'Sauvegarde créée. Choisissez maintenant où la conserver.')),
         );
       }
     } catch (_) {
@@ -338,22 +331,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Future<void> _importBackup() async {
     final bool? confirmed = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Importer une sauvegarde ?'),
-        content: const Text(
-          'Les données actuelles de ce téléphone seront remplacées par la sauvegarde sélectionnée.',
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Importer'),
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Importer une sauvegarde ?'),
+          content: const Text(
+              'Les données actuelles de ce téléphone seront remplacées par la sauvegarde sélectionnée.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Annuler'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Importer'),
+            ),
+          ],
+        );
+      },
     );
     if (confirmed != true) return;
     try {
@@ -370,46 +364,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text(
-              'Importation impossible : vérifiez le fichier choisi.',
-            ),
-          ),
+              content:
+                  Text('Importation impossible : vérifiez le fichier choisi.')),
         );
       }
     }
   }
 
-  Widget _transactionTile(CashTransaction transaction) => Card(
-    child: ListTile(
-      leading: CircleAvatar(
-        backgroundColor: transaction.type == TransactionType.income
-            ? Colors.green.shade100
-            : Colors.red.shade100,
-        child: Icon(
-          transaction.type == TransactionType.income
-              ? Icons.south_west
-              : Icons.north_east,
-          color: transaction.type == TransactionType.income
-              ? Colors.green
-              : Colors.red,
+  Widget _transactionTile(CashTransaction transaction) {
+    return Card(
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: transaction.type == TransactionType.income
+              ? Colors.green.shade100
+              : Colors.red.shade100,
+          child: Icon(
+            transaction.type == TransactionType.income
+                ? Icons.south_west
+                : Icons.north_east,
+            color: transaction.type == TransactionType.income
+                ? Colors.green
+                : Colors.red,
+          ),
         ),
-      ),
-      title: Text(transaction.description),
-      subtitle: Text(
-        '${transaction.category} • ${DateFormat('dd/MM/yyyy').format(transaction.date)}',
-      ),
-      trailing: Text(
-        '${transaction.type == TransactionType.income ? '+' : '−'}${money(transaction.amount)}',
-        style: TextStyle(
-          color: transaction.type == TransactionType.income
-              ? Colors.green
-              : Colors.red,
-          fontWeight: FontWeight.bold,
+        title: Text(transaction.description),
+        subtitle: Text(
+            '${transaction.category} • ${DateFormat('dd/MM/yyyy').format(transaction.date)}'),
+        trailing: Text(
+          '${transaction.type == TransactionType.income ? '+' : '−'}${money(transaction.amount)}',
+          style: TextStyle(
+            color: transaction.type == TransactionType.income
+                ? Colors.green
+                : Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        onTap: () => _add(transaction),
       ),
-      onTap: () => _add(transaction),
-    ),
-  );
+    );
+  }
 
   Future<void> _add([CashTransaction? transaction]) async {
     await Navigator.of(context).push(

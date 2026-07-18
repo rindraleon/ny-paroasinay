@@ -4,8 +4,7 @@ import '../models/transaction.dart';
 
 final transactionsProvider =
     AsyncNotifierProvider<TransactionsNotifier, List<CashTransaction>>(
-      TransactionsNotifier.new,
-    );
+        TransactionsNotifier.new);
 
 class TransactionsNotifier extends AsyncNotifier<List<CashTransaction>> {
   @override
@@ -23,16 +22,10 @@ class TransactionsNotifier extends AsyncNotifier<List<CashTransaction>> {
   }
 }
 
-final balanceProvider = Provider<int>(
-  (Ref ref) =>
-      ref
-          .watch(transactionsProvider)
-          .valueOrNull
-          ?.fold<int>(
-            0,
-            (int value, CashTransaction tx) =>
-                value +
-                (tx.type == TransactionType.income ? tx.amount : -tx.amount),
-          ) ??
-      0,
-);
+final balanceProvider = Provider<int>((Ref ref) =>
+    ref.watch(transactionsProvider).valueOrNull?.fold<int>(
+        0,
+        (int value, CashTransaction tx) =>
+            value +
+            (tx.type == TransactionType.income ? tx.amount : -tx.amount)) ??
+    0);

@@ -21,7 +21,7 @@ Prérequis : Flutter stable et Android SDK.
 ```bash
 flutter pub get
 flutter create --platforms=android --org mg.tsararivotra . # une seule fois si android/ n’existe pas
-dart run tool/prepare_android.dart # définit Ny Paroasinay
+dart run tool/prepare_android.dart # définit le nom Ny Paroasinay
 dart run flutter_launcher_icons # génère l’icône de Saint François
 flutter run
 ```
@@ -34,19 +34,36 @@ flutter build apk --release
 
 Le fichier est produit dans `build/app/outputs/flutter-apk/app-release.apk`.
 
+## Build APK sans installation locale
+
+Si vous n’avez pas Android SDK / Java installé localement, utilisez le workflow GitHub Actions pour générer l’APK automatiquement :
+
+1. Poussez votre code sur GitHub ;
+2. Allez dans l’onglet **Actions** du dépôt ;
+3. Sélectionnez le workflow **Build APK** ;
+4. Cliquez sur **Run workflow** ;
+5. Une fois le build terminé, téléchargez l’APK depuis la section **Artifacts**.
+
+Le workflow effectue automatiquement :
+- `flutter pub get`
+- `flutter analyze`
+- `flutter test`
+- `flutter build apk --release`
+
+L’APK est disponible sous le nom `release-apk` pendant 30 jours.
+
 ## CI/CD GitHub
 
-Le fichier [`.github/workflows/flutter_ci.yml`](.github/workflows/flutter_ci.yml) effectue automatiquement :
+Le fichier [`.github/workflows/build_apk.yml`](.github/workflows/build_apk.yml) effectue automatiquement :
 
-1. `dart format` : contrôle du formatage ;
-2. `flutter analyze` : linter / analyse statique ;
-3. `flutter test` : tests unitaires ;
-4. `flutter build apk --release` et `flutter build appbundle --release` ;
-5. dépôt des fichiers APK et AAB comme artefacts GitHub.
+1. `flutter analyze` : linter / analyse statique ;
+2. `flutter test` : tests unitaires ;
+3. `flutter build apk --release` ;
+4. dépôt du fichier APK comme artefact GitHub.
 
-À chaque *push* sur `main` ou chaque Pull Request, la qualité et le build sont vérifiés. Les artefacts sont accessibles dans **Actions → Flutter CI/CD → Artifacts**.
+À chaque *push* sur `main` ou `master`, ou lors d’un Pull Request, la qualité et le build sont vérifiés. Les artefacts sont accessibles dans **Actions → Build APK → Artifacts**.
 
-Pour créer automatiquement une release GitHub avec l’APK et l’AAB :
+Pour créer automatiquement une release GitHub avec l’APK :
 
 ```bash
 git tag v1.0.0

@@ -1,11 +1,67 @@
+# Dart/Flutter
 .dart_tool/
 .packages
 .pub/
 build/
+.flutter-plugins-dependencies
+.flutter-plugins
+
+# IDE
 .idea/
 *.iml
+.vscode/
+
+# Android
 android/.gradle/
 android/local.properties
 android/key.properties
 *.jks
 *.keystore
+android/app/debug/
+android/app/profile/
+android/captures/
+android/build/
+
+# iOS
+ios/.symlinks/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/ephemeral/
+ios/Pods/
+ios/Runner.xcworkspace/
+ios/build/
+
+# Web
+web/_flutter/
+
+# Linux
+linux/flutter/
+linux/build/
+
+# macOS
+macos/Flutter/Generated.xcconfig
+macos/Flutter/ephemeral/
+macos/build/
+
+# Windows
+windows/flutter/
+windows/build/
+
+# Test
+coverage/
+
+# Misc
+*.log
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Documentation
+doc/api/
+
+# third_party (ne pas commit les dépendances tierces)
+third_party/

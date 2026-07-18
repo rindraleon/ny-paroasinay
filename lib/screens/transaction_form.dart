@@ -15,6 +15,7 @@ const List<String> incomeCategories = <String>[
   'Subvention',
   'Autre revenu',
 ];
+
 const List<String> expenseCategories = <String>[
   'Électricité / eau',
   'Entretien et réparation',
@@ -31,6 +32,7 @@ const List<String> expenseCategories = <String>[
 class TransactionForm extends ConsumerStatefulWidget {
   const TransactionForm({super.key, this.transaction});
   final CashTransaction? transaction;
+
   @override
   ConsumerState<TransactionForm> createState() => _TransactionFormState();
 }
@@ -73,16 +75,18 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    final List<String> categories = _type == TransactionType.income
-        ? incomeCategories
-        : expenseCategories;
-    if (!categories.contains(_category)) _category = categories.first;
+    final List<String> categories =
+        _type == TransactionType.income ? incomeCategories : expenseCategories;
+    if (!categories.contains(_category)) {
+      _category = categories.first;
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           widget.transaction == null
               ? 'Nouvelle opération'
-              : 'Modifier l’opération',
+              : 'Modifier l\'opération',
         ),
         actions: <Widget>[
           if (widget.transaction != null)
@@ -112,15 +116,15 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 ),
               ],
               selected: <TransactionType>{_type},
-              onSelectionChanged: (Set<TransactionType> selected) =>
-                  setState(() {
-                    _type = selected.first;
-                    _category =
-                        (_type == TransactionType.income
-                                ? incomeCategories
-                                : expenseCategories)
-                            .first;
-                  }),
+              onSelectionChanged: (Set<TransactionType> selected) {
+                setState(() {
+                  _type = selected.first;
+                  _category = (_type == TransactionType.income
+                          ? incomeCategories
+                          : expenseCategories)
+                      .first;
+                });
+              },
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -131,10 +135,13 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.payments_outlined),
               ),
-              validator: (String? value) =>
-                  int.tryParse(value ?? '') == null || int.parse(value!) <= 0
-                  ? 'Saisissez un montant valide'
-                  : null,
+              validator: (String? value) {
+                if (int.tryParse(value ?? '') == null ||
+                    int.parse(value!) <= 0) {
+                  return 'Saisissez un montant valide';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 14),
             DropdownButtonFormField<String>(
@@ -144,7 +151,10 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 border: OutlineInputBorder(),
               ),
               items: categories
-                  .map((String x) => DropdownMenuItem(value: x, child: Text(x)))
+                  .map((String x) => DropdownMenuItem(
+                        value: x,
+                        child: Text(x),
+                      ))
                   .toList(),
               onChanged: (String? x) => setState(() => _category = x!),
             ),
@@ -155,9 +165,12 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 labelText: 'Libellé / motif *',
                 border: OutlineInputBorder(),
               ),
-              validator: (String? value) => (value ?? '').trim().isEmpty
-                  ? 'Ce champ est obligatoire'
-                  : null,
+              validator: (String? value) {
+                if ((value ?? '').trim().isEmpty) {
+                  return 'Ce champ est obligatoire';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 14),
             ListTile(
@@ -166,7 +179,9 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 side: BorderSide(color: Theme.of(context).colorScheme.outline),
               ),
               title: const Text('Date'),
-              subtitle: Text(DateFormat('EEEE d MMMM y', 'fr').format(_date)),
+              subtitle: Text(
+                DateFormat('EEEE d MMMM y', 'fr').format(_date),
+              ),
               trailing: const Icon(Icons.calendar_today),
               onTap: _pickDate,
             ),
@@ -202,13 +217,19 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
                 labelText: 'Mode de paiement',
                 border: OutlineInputBorder(),
               ),
-              items:
-                  const <String>['Espèces', 'Mobile Money', 'Virement', 'Autre']
-                      .map(
-                        (String x) =>
-                            DropdownMenuItem(value: x, child: Text(x)),
-                      )
-                      .toList(),
+              items: const <String>[
+                'Espèces',
+                'Mobile Money',
+                'Virement',
+                'Autre',
+              ]
+                  .map(
+                    (String x) => DropdownMenuItem(
+                      value: x,
+                      child: Text(x),
+                    ),
+                  )
+                  .toList(),
               onChanged: (String? x) => setState(() => _paymentMethod = x!),
             ),
             const SizedBox(height: 24),
@@ -234,14 +255,15 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
       lastDate: DateTime(2100),
       locale: const Locale('fr'),
     );
-    if (chosen != null) setState(() => _date = chosen);
+    if (chosen != null) {
+      setState(() => _date = chosen);
+    }
   }
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
-    await ref
-        .read(transactionsProvider.notifier)
-        .save(
+
+    await ref.read(transactionsProvider.notifier).save(
           CashTransaction(
             id: widget.transaction?.id,
             type: _type,
@@ -255,32 +277,40 @@ class _TransactionFormState extends ConsumerState<TransactionForm> {
             isAnonymous: _anonymous,
           ),
         );
-    if (mounted) Navigator.pop(context);
+
+    if (mounted) {
+      Navigator.pop(context);
+    }
   }
 
   Future<void> _delete() async {
     final bool? yes = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('Supprimer cette opération ?'),
-        content: const Text('Cette action est définitive.'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Annuler'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            child: const Text('Supprimer'),
-          ),
-        ],
-      ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Supprimer cette opération ?'),
+          content: const Text('Cette action est définitive.'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Annuler'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Supprimer'),
+            ),
+          ],
+        );
+      },
     );
+
     if (yes == true) {
       await ref
           .read(transactionsProvider.notifier)
           .delete(widget.transaction!.id!);
-      if (mounted) Navigator.pop(context);
+      if (mounted) {
+        Navigator.pop(context);
+      }
     }
   }
 }

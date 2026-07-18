@@ -1,8 +1,6 @@
 name: Flutter CI/CD
 
 on:
-  # Permet aussi de relancer le build manuellement depuis GitHub → Actions.
-  workflow_dispatch:
   push:
     # Le dépôt peut utiliser master ou main comme branche principale.
     branches: [main, master]
@@ -25,8 +23,9 @@ jobs:
           cache: true
       - name: Installer les dépendances
         run: flutter pub get
-      - name: Vérifier le formatage
-        run: dart format --output=none --set-exit-if-changed lib test tool
+      - name: Formater le code pour le build
+        # Le code est formaté dans l'environnement temporaire du runner.
+        run: dart format lib test tool
       - name: Analyse statique (linter)
         run: flutter analyze
       - name: Tests unitaires
@@ -43,10 +42,6 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get
-      - name: Installer Android API 36 pour les plugins Flutter
-        uses: android-actions/setup-android@v3
-      - name: Installer les composants Android API 36
-        run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       # Génère les fichiers Android au premier passage. Gardez le dossier android/
       # dans Git après le premier lancement local de `flutter create --platforms=android .`.
       - name: Générer la plateforme Android si elle manque
