@@ -21,7 +21,6 @@ dependencies:
   printing: ^5.13.1
   share_plus: ^10.0.0
   path_provider: ^2.1.3
-  file_picker: ^8.0.6
 
   # Image de Saint François utilisée comme icône Android.
   flutter_launcher_icons: ^0.13.1
